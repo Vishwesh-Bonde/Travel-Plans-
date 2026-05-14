@@ -17,13 +17,13 @@ Plan trips, track expenses, check weather, translate languages, and search fligh
 
 ## 📸 Screenshots
 
-|                  Landing Page                  |                  Dashboard                   |               Trip Detail               |
-| :--------------------------------------------: | :------------------------------------------: | :-------------------------------------: |
-| Editorial-style homepage with destination grid | Analytics dashboard with trip stats & charts | Detailed trip view with budget tracking |
+|               Landing Page               |             Dashboard              |              Trip Detail               |
+| :--------------------------------------: | :--------------------------------: | :------------------------------------: |
+| ![Landing Page](assets/landing_page.png) | ![Dashboard](assets/dashboard.png) | ![Trip Detail](assets/trip_detail.png) |
 
-|           Expense Tracker           |        Weather Forecast         |         Live Translator         |
-| :---------------------------------: | :-----------------------------: | :-----------------------------: |
-| Pie chart breakdown with CSV export | 5-day forecast with travel tips | Powered by Google Translate API |
+|                Expense Tracker                 |                 Weather Forecast                 |                Live Translator                 |
+| :--------------------------------------------: | :----------------------------------------------: | :--------------------------------------------: |
+| ![Expense Tracker](assets/expense_tracker.png) | ![Weather Forecast](assets/weather_forecast.png) | ![Live Translator](assets/live_translator.png) |
 
 ---
 
