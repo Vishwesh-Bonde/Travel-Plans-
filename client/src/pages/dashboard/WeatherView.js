@@ -243,9 +243,7 @@ const WeatherView = () => {
                 {/* ✅ Real fetchedAt timestamp */}
                 <Typography variant="caption" color="text.disabled">
                   Last updated:{" "}
-                  {fetchedAt
-                    ? new Date(fetchedAt).toLocaleTimeString()
-                    : "—"}
+                  {fetchedAt ? new Date(fetchedAt).toLocaleTimeString() : "—"}
                 </Typography>
 
                 {/* ✅ Manual refresh button */}
