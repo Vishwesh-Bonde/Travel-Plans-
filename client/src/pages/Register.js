@@ -130,7 +130,13 @@ const Register = () => {
             <Typography variant="h6" sx={{ mb: 3 }}>
               Let's get to know you
             </Typography>
-            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                gap: 2,
+              }}
+            >
               <TextField
                 autoComplete="given-name"
                 name="firstName"
