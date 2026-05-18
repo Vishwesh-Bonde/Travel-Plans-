@@ -13,18 +13,28 @@ exports.register = async (req, res, next) => {
     }
 
     if (!/^[A-Za-z\s]+$/.test(name) || name.trim().length < 2) {
-      return res.status(400).json({ msg: "Name must be at least 2 characters and contain only letters" });
+      return res
+        .status(400)
+        .json({
+          msg: "Name must be at least 2 characters and contain only letters",
+        });
     }
 
     // RFC 5322 email pre-validation: reject leading dots and malformed structures before DB queries
-    if (!/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    if (
+      !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    ) {
       return res.status(400).json({ msg: "Please enter a valid email" });
     }
 
     // Enforce strong password complexity rules at the controller level (atleast 8 characters and atleast contain 1 uppercase, 1 lowercase, 1 number, and 1 special character)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!passwordRegex.test(password)) {
-      return res.status(400).json({ msg: "Password must be at least 8 characters and atleast contain 1 uppercase, 1 lowercase, 1 number, and 1 special character" });
+      return res
+        .status(400)
+        .json({
+          msg: "Password must be at least 8 characters and atleast contain 1 uppercase, 1 lowercase, 1 number, and 1 special character",
+        });
     }
 
     // Check if user already exists
@@ -34,7 +44,11 @@ exports.register = async (req, res, next) => {
     }
 
     // Create new user with normalized single-spaced name
-    user = new User({ name: name.trim().replace(/\s+/g, " "), email, password });
+    user = new User({
+      name: name.trim().replace(/\s+/g, " "),
+      email,
+      password,
+    });
     await user.save();
 
     // Create JWT token
@@ -66,7 +80,9 @@ exports.login = async (req, res, next) => {
     }
 
     // RFC 5322 email pre-validation for login attempts
-    if (!/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    if (
+      !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    ) {
       return res.status(400).json({ msg: "Please enter a valid email" });
     }
 

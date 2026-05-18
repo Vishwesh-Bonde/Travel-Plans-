@@ -57,7 +57,12 @@ const Login = () => {
 
     if (name === "email") {
       // Real-time strict RFC 5322 email pre-validation for login inputs
-      if (value && !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+      if (
+        value &&
+        !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          value,
+        )
+      ) {
         setErrors((prev) => ({ ...prev, email: "Please enter a valid email" }));
       } else {
         setErrors((prev) => ({ ...prev, email: "" }));
@@ -79,7 +84,12 @@ const Login = () => {
     let isValid = true;
     let tempErrors = { email: "", password: "" };
 
-    if (!formData.email || !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    if (
+      !formData.email ||
+      !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        formData.email,
+      )
+    ) {
       tempErrors.email = "Please enter a valid email";
       isValid = false;
     }

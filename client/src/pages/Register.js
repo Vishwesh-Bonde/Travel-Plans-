@@ -82,7 +82,12 @@ const Register = () => {
       }
     } else if (name === "email") {
       // Real-time strict RFC 5322 email pre-validation
-      if (value && !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+      if (
+        value &&
+        !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          value,
+        )
+      ) {
         newErrors.email = "Please enter a valid email address";
       } else {
         newErrors.email = "";
@@ -91,7 +96,8 @@ const Register = () => {
       // Real-time strong password complexity pre-validation (min 8 chars, 1 upper, 1 lower, 1 num, 1 special)
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
       if (value && !passwordRegex.test(value)) {
-        newErrors.password = "Password must be at least 8 chars with atleast 1 uppercase, 1 lowercase, 1 number, and 1 special char";
+        newErrors.password =
+          "Password must be at least 8 chars with atleast 1 uppercase, 1 lowercase, 1 number, and 1 special char";
       } else {
         newErrors.password = "";
       }
@@ -129,7 +135,10 @@ const Register = () => {
     e.preventDefault();
     if (activeStep === steps.length - 1) {
       const payload = {
-        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.replace(/\s+/g, " "),
+        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.replace(
+          /\s+/g,
+          " ",
+        ),
         email: formData.email,
         password: formData.password,
       };
