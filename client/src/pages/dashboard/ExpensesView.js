@@ -79,6 +79,7 @@ const ExpensesView = () => {
 
   const [activeTripId, setActiveTripId] = useState("");
   const [open, setOpen] = useState(false);
+  const [amountError, setAmountError] = useState("");
   const [form, setForm] = useState({
     amount: "",
     category: "Food",
@@ -115,14 +116,35 @@ const ExpensesView = () => {
     ? expenseSummary.map((s) => ({ name: s._id, value: s.totalAmount }))
     : [];
 
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    setForm({ ...form, amount: value });
+    if (value === "") {
+      setAmountError("");
+    } else if (parseFloat(value) < 0) {
+      setAmountError("Amount must be a positive number.");
+    } else if (parseFloat(value) === 0) {
+      setAmountError("Amount must be greater than zero.");
+    } else {
+      setAmountError("");
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.amount || !activeTripId) return;
+    const parsed = parseFloat(form.amount);
+
+    if (!form.amount || isNaN(parsed) || parsed <= 0) {
+      setAmountError("Please enter a valid amount greater than zero.");
+      return;
+    }
+    if (!activeTripId) return;
+
     dispatch(
       addExpense({
         ...form,
         trip: activeTripId,
-        amount: parseFloat(form.amount),
+        amount: parsed,
       }),
     );
     setOpen(false);
@@ -133,7 +155,20 @@ const ExpensesView = () => {
       date: new Date().toISOString().split("T")[0],
       currency: "INR",
     });
+    setAmountError("");
     setTimeout(() => dispatch(getExpenseSummary(activeTripId)), 500);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setAmountError("");
+    setForm({
+      amount: "",
+      category: "Food",
+      description: "",
+      date: new Date().toISOString().split("T")[0],
+      currency: "INR",
+    });
   };
 
   const handleDelete = (id) => {
@@ -464,10 +499,12 @@ const ExpensesView = () => {
       </Grid>
 
       {/* Add Expense Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ fontWeight: 700 }}>Add Expense</DialogTitle>
         <DialogContent>
-          <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 2.5 }}>
+          <Box
+            sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 2.5 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -475,7 +512,10 @@ const ExpensesView = () => {
                   label="Amount (₹) *"
                   type="number"
                   value={form.amount}
-                  onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                  onChange={handleAmountChange}
+                  error={Boolean(amountError)}
+                  helperText={amountError}
+                  inputProps={{ min: 0.01, step: 0.01 }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -484,7 +524,9 @@ const ExpensesView = () => {
                   select
                   label="Currency"
                   value={form.currency}
-                  onChange={(e) => setForm({ ...form, currency: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, currency: e.target.value })
+                  }
                 >
                   {["INR", "USD", "EUR", "GBP"].map((c) => (
                     <MenuItem key={c} value={c}>
@@ -511,7 +553,9 @@ const ExpensesView = () => {
               fullWidth
               label="Description / Note"
               value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
             />
             <TextField
               fullWidth
@@ -524,8 +568,12 @@ const ExpensesView = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <PrimaryButton onClick={handleSubmit} sx={{ px: 3 }}>
+          <Button onClick={handleClose}>Cancel</Button>
+          <PrimaryButton
+            onClick={handleSubmit}
+            sx={{ px: 3 }}
+            disabled={Boolean(amountError) || !form.amount}
+          >
             Save
           </PrimaryButton>
         </DialogActions>

@@ -17,7 +17,6 @@ import {
   Stepper,
   Step,
   StepLabel,
-  Grid,
   FormControlLabel,
   Checkbox,
 } from "@mui/material";
@@ -40,6 +39,12 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     agreeTerms: false,
+  });
+  const [fieldErrors, setFieldErrors] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
@@ -66,6 +71,35 @@ const Register = () => {
       ...formData,
       [name]: newValue,
     });
+
+    const newErrors = { ...fieldErrors };
+    if (name === "firstName" || name === "lastName") {
+      if (value && (!/^[A-Za-z\s]+$/.test(value) || value.trim().length < 1)) {
+        newErrors[name] = "Name can only contain letters and spaces";
+      } else {
+        newErrors[name] = "";
+      }
+    } else if (name === "email") {
+      if (
+        value &&
+        !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          value,
+        )
+      ) {
+        newErrors.email = "Please enter a valid email address";
+      } else {
+        newErrors.email = "";
+      }
+    } else if (name === "password") {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (value && !passwordRegex.test(value)) {
+        newErrors.password =
+          "Password must be at least 8 chars with atleast 1 uppercase, 1 lowercase, 1 number, and 1 special char";
+      } else {
+        newErrors.password = "";
+      }
+    }
+    setFieldErrors(newErrors);
 
     if (
       name === "confirmPassword" ||
@@ -97,11 +131,14 @@ const Register = () => {
     e.preventDefault();
     if (activeStep === steps.length - 1) {
       const payload = {
-        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.replace(
+          /\s+/g,
+          " ",
+        ),
         email: formData.email,
         password: formData.password,
       };
-      dispatch(register(payload));
+      dispatch(register(payload, navigate));
     } else {
       handleNext();
     }
@@ -109,13 +146,22 @@ const Register = () => {
 
   const isNextDisabled = () => {
     if (activeStep === 0) {
-      return !formData.firstName || !formData.lastName;
+      return (
+        !formData.firstName ||
+        formData.firstName.trim() === "" ||
+        !!fieldErrors.firstName ||
+        !formData.lastName ||
+        formData.lastName.trim() === "" ||
+        !!fieldErrors.lastName
+      );
     } else if (activeStep === 1) {
       return (
         !formData.email ||
+        !!fieldErrors.email ||
         !formData.password ||
+        !!fieldErrors.password ||
         !formData.confirmPassword ||
-        passwordError ||
+        !!passwordError ||
         !formData.agreeTerms
       );
     }
@@ -130,33 +176,33 @@ const Register = () => {
             <Typography variant="h6" sx={{ mb: 3 }}>
               Let's get to know you
             </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  value={formData.firstName}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
+            <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                value={formData.firstName}
+                onChange={handleChange}
+                error={!!fieldErrors.firstName}
+                helperText={fieldErrors.firstName}
+              />
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+                value={formData.lastName}
+                onChange={handleChange}
+                error={!!fieldErrors.lastName}
+                helperText={fieldErrors.lastName}
+              />
+            </Box>
           </>
         );
       case 1:
@@ -174,6 +220,8 @@ const Register = () => {
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
+              error={!!fieldErrors.email}
+              helperText={fieldErrors.email}
               sx={{ mb: 2 }}
             />
             <TextField
@@ -186,6 +234,8 @@ const Register = () => {
               autoComplete="new-password"
               value={formData.password}
               onChange={handleChange}
+              error={!!fieldErrors.password}
+              helperText={fieldErrors.password}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -194,7 +244,11 @@ const Register = () => {
                       onClick={toggleShowPassword}
                       edge="end"
                     >
-                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      {showPassword ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -253,7 +307,10 @@ const Register = () => {
       case 2:
         return (
           <Box sx={{ textAlign: "center", py: 2 }}>
-            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 64, mb: 2 }} />
+            <CheckCircleOutlineIcon
+              color="success"
+              sx={{ fontSize: 64, mb: 2 }}
+            />
             <Typography variant="h6" gutterBottom>
               Almost there!
             </Typography>
@@ -314,16 +371,41 @@ const Register = () => {
             }}
           />
           <Box sx={{ position: "relative", p: 6, color: "white" }}>
-            <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 2 }}>
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{ fontWeight: 700, mb: 2 }}
+            >
               Join PackGo
             </Typography>
             <Typography variant="h5" sx={{ mb: 4, maxWidth: "80%" }}>
               Create an account to start planning your next adventure
             </Typography>
             <Box sx={{ display: "flex", gap: 1, mb: 4 }}>
-              <Box sx={{ width: 12, height: 12, bgcolor: "white", borderRadius: "50%" }} />
-              <Box sx={{ width: 12, height: 12, bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: "50%" }} />
-              <Box sx={{ width: 12, height: 12, bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: "50%" }} />
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "white",
+                  borderRadius: "50%",
+                }}
+              />
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "rgba(255, 255, 255, 0.5)",
+                  borderRadius: "50%",
+                }}
+              />
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "rgba(255, 255, 255, 0.5)",
+                  borderRadius: "50%",
+                }}
+              />
             </Box>
           </Box>
         </Box>
@@ -370,18 +452,21 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
               <Box sx={{ mb: 4 }}>{getStepContent(activeStep)}</Box>
 
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  startIcon={<ArrowBackIcon />}
-                  sx={{ visibility: activeStep === 0 ? "hidden" : "visible" }}
-                >
-                  Back
-                </Button>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {activeStep > 0 && (
+                  <Button
+                    onClick={handleBack}
+                    startIcon={<ArrowBackIcon />}
+                    variant="outlined"
+                    sx={{ flex: 1, py: 1.5, borderRadius: 2, fontWeight: 600 }}
+                  >
+                    Back
+                  </Button>
+                )}
                 <PrimaryButton
                   type="submit"
                   disabled={isNextDisabled()}
+                  sx={{ flex: 1, py: 1.5, borderRadius: 2, fontWeight: 600 }}
                   endIcon={
                     activeStep === steps.length - 1 ? (
                       <HowToRegIcon />
@@ -402,7 +487,9 @@ const Register = () => {
                     </Typography>
                   </Divider>
 
-                  <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", gap: 2 }}
+                  >
                     <Button
                       variant="outlined"
                       startIcon={<GoogleIcon />}

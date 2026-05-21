@@ -5,7 +5,6 @@ import { login } from "../redux/actions/authActions";
 import {
   Box,
   TextField,
-  Button,
   Typography,
   Paper,
   Link,
@@ -30,6 +29,10 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -46,19 +49,74 @@ const Login = () => {
   }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    if (name === "email") {
+      if (
+        value &&
+        !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+          value,
+        )
+      ) {
+        setErrors((prev) => ({ ...prev, email: "Please enter a valid email" }));
+      } else {
+        setErrors((prev) => ({ ...prev, email: "" }));
+      }
+    } else if (name === "password") {
+      if (!value || value.trim() === "") {
+        setErrors((prev) => ({ ...prev, password: "Password is required" }));
+      } else {
+        setErrors((prev) => ({ ...prev, password: "" }));
+      }
+    }
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const validateForm = () => {
+    let isValid = true;
+    let tempErrors = { email: "", password: "" };
+
+    if (
+      !formData.email ||
+      !/^[a-zA-Z0-9][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        formData.email,
+      )
+    ) {
+      tempErrors.email = "Please enter a valid email";
+      isValid = false;
+    }
+    if (!formData.password || formData.password.trim() === "") {
+      tempErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
+  const isSignInDisabled = () => {
+    return (
+      !formData.email ||
+      formData.email.trim() === "" ||
+      !!errors.email ||
+      !formData.password ||
+      formData.password.trim() === "" ||
+      !!errors.password
+    );
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(formData));
+    if (validateForm()) {
+      dispatch(login(formData));
+    }
   };
 
   return (
@@ -69,7 +127,6 @@ const Login = () => {
         backgroundColor: theme.palette.background.default,
       }}
     >
-      {/* Left side with image - shown only on desktop */}
       {!isMobile && (
         <Box
           sx={{
@@ -109,20 +166,34 @@ const Login = () => {
             </Typography>
             <Box sx={{ display: "flex", gap: 1, mb: 4 }}>
               <Box
-                sx={{ width: 12, height: 12, bgcolor: "white", borderRadius: "50%" }}
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "white",
+                  borderRadius: "50%",
+                }}
               />
               <Box
-                sx={{ width: 12, height: 12, bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: "50%" }}
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "rgba(255, 255, 255, 0.5)",
+                  borderRadius: "50%",
+                }}
               />
               <Box
-                sx={{ width: 12, height: 12, bgcolor: "rgba(255, 255, 255, 0.5)", borderRadius: "50%" }}
+                sx={{
+                  width: 12,
+                  height: 12,
+                  bgcolor: "rgba(255, 255, 255, 0.5)",
+                  borderRadius: "50%",
+                }}
               />
             </Box>
           </Box>
         </Box>
       )}
 
-      {/* Right side with login form */}
       <Box
         sx={{
           flex: 1,
@@ -164,6 +235,8 @@ const Login = () => {
                 autoFocus
                 value={formData.email}
                 onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
                 sx={{ mb: 3 }}
               />
               <TextField
@@ -177,6 +250,8 @@ const Login = () => {
                 autoComplete="current-password"
                 value={formData.password}
                 onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -185,7 +260,11 @@ const Login = () => {
                         onClick={toggleShowPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        {showPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -211,7 +290,11 @@ const Login = () => {
                   }
                   label="Remember me"
                 />
-                <Link component={RouterLink} to="/forgot-password" variant="body2">
+                <Link
+                  component={RouterLink}
+                  to="/forgot-password"
+                  variant="body2"
+                >
                   Forgot password?
                 </Link>
               </Box>
@@ -220,6 +303,7 @@ const Login = () => {
                 type="submit"
                 fullWidth
                 size="large"
+                disabled={isSignInDisabled()}
                 sx={{ py: 1.5, mb: 3, borderRadius: 2, fontWeight: 600 }}
                 endIcon={<LoginIcon />}
               >
