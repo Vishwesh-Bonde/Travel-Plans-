@@ -399,6 +399,19 @@ const BookingView = () => {
                       variant="outlined"
                       color="primary"
                       sx={{ borderRadius: 3 }}
+                      onClick={() => {
+                        // Format origin and destination to uppercase
+                        const origin = flight.origin.trim().toUpperCase();
+                        const destination = flight.destination
+                          .trim()
+                          .toUpperCase();
+                        // Format date from YYYY-MM-DD to YYYYMMDD for Skyscanner URL
+                        const date = flight.departureDate.replace(/-/g, "");
+                        // Build Skyscanner search URL with flight details pre-filled
+                        const url = `https://www.skyscanner.net/transport/flights/${origin}/${destination}/${date}/`;
+                        // Open in new tab so user doesn't lose their search results
+                        window.open(url, "_blank");
+                      }}
                     >
                       Select
                     </Button>
