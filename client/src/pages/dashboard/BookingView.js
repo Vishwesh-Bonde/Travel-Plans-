@@ -400,16 +400,18 @@ const BookingView = () => {
                       color="primary"
                       sx={{ borderRadius: 3 }}
                       onClick={() => {
-                        // Format origin and destination to uppercase
-                        const origin = flight.origin.trim().toUpperCase();
-                        const destination = flight.destination
-                          .trim()
-                          .toUpperCase();
-                        // Format date from YYYY-MM-DD to YYYYMMDD for Skyscanner URL
-                        const date = flight.departureDate.replace(/-/g, "");
-                        // Build Skyscanner search URL with flight details pre-filled
-                        const url = `https://www.skyscanner.net/transport/flights/${origin}/${destination}/${date}/`;
-                        // Open in new tab so user doesn't lose their search results
+                        // Format date from YYYY-MM-DD to DDMMYYYY for MakeMyTrip
+                        const [year, month, day] =
+                          flight.departureDate.split("-");
+                        const formattedDate = `${day}${month}${year}`;
+
+                        const origin = flight.origin.trim();
+                        const destination = flight.destination.trim();
+
+                        // MakeMyTrip URL with all details pre-filled
+                        const url = `https://www.makemytrip.com/flight/search?tripType=O&itinerary=${origin}-${destination}-${formattedDate}&paxType=A-1_C-0_I-0&cabinClass=E&sTime=${Date.now()}&forwardFlowRequired=true`;
+
+                        // Open in new tab so user doesn't lose search
                         window.open(url, "_blank");
                       }}
                     >
