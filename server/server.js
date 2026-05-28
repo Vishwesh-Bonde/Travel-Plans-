@@ -48,12 +48,11 @@ allowedOrigins.push(...frontendUrls);
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (mobile apps, curl, Postman)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        return callback(null, true);
-      }
-      if (process.env.NODE_ENV !== "production") {
+      if (
+        origin.includes("localhost") ||
+        origin.includes("vercel.app")
+      ) {
         return callback(null, true);
       }
       callback(new Error("Not allowed by CORS"));
