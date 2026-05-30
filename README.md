@@ -256,7 +256,7 @@ Make sure you have the following installed:
 
 ```bash
 git clone https://github.com/hitesh-kumar123/Travel-Plans-.git
-cd travel-planner
+cd Travel-Plans-
 ```
 
 ### 2. Install Dependencies
@@ -591,21 +591,23 @@ We are incredibly grateful to our mentors for their valuable support and code re
 
 ---
 
-
 ⭐ **If PackGo helped you, please give it a star — it means a lot!** ⭐
 
 </div>
 
-/**
+/\*\*
+
 ## ✨ README Improvement Notes
 
 ### 📌 Formatting Enhancements Needed
+
 - Improve heading hierarchy for better readability
 - Ensure consistent spacing between sections
 - Use proper Markdown formatting for code blocks and lists
 - Align all installation and usage steps properly
 
 ### 🚀 Suggested Structure Upgrade
+
 - Introduction
 - Features
 - Tech Stack
@@ -616,10 +618,12 @@ We are incredibly grateful to our mentors for their valuable support and code re
 - License
 
 ### 🛠️ Documentation Improvements
+
 - Add badges (optional): build, license, contributors
 - Add screenshots for better UI understanding
 - Standardize code blocks for commands
 
 ### 🎯 Goal
+
 Improve onboarding experience for new contributors and users by making README more structured, readable, and professional.
-*/
+\*/
