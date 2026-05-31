@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 // @route   POST api/auth/register
 // @desc    Register a user
 // @access  Public
+router.post("/google",authController.googleAuth); // for google login.
 router.post("/register", authController.register);
 
 // @route   POST api/auth/login
