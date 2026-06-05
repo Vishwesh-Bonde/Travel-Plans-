@@ -746,7 +746,7 @@ const BookingView = () => {
           <Typography variant="h6" fontWeight={700} mb={2}>
             {hotels.length} Hotel{hotels.length !== 1 ? "s" : ""} Found
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={{ xs: 2, md: 3 }}>
             {hotels.map((hotel) => (
               <Grid xs={12} md={6} lg={4} key={hotel.id}>
                 <Card
@@ -773,8 +773,12 @@ const BookingView = () => {
                       sx={{ fontSize: 64, color: "primary.main", opacity: 0.4 }}
                     />
                   </Box>
-                  <CardContent>
-                    <Typography variant="h6" fontWeight={700}>
+                  <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+                    <Typography
+                      variant="h6"
+                      fontWeight={700}
+                      sx={{ wordBreak: "break-word" }}
+                    >
                       {hotel.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" mb={1}>
@@ -822,6 +826,8 @@ const BookingView = () => {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        flexWrap: "wrap",
+                        gap: 1,
                       }}
                     >
                       <Box>

@@ -93,6 +93,18 @@ const SharedTripView = () => {
         </Button>
       </Box>
       <Box
+        className="no-print"
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          mb: 2,
+        }}
+      >
+        <Button variant="contained" onClick={() => window.print()}>
+          🖨️ Export PDF / Print Itinerary
+        </Button>
+      </Box>
+      <Box
         sx={{
           position: "relative",
           borderRadius: 4,
@@ -159,8 +171,7 @@ const SharedTripView = () => {
           />
         </Box>
       </Box>
-
-      <Grid container spacing={2} sx={{ mb: 3 }}>
+      <Grid container spacing={2} sx={{ mb: 3 }} className="print-section">
         {[
           {
             label: "Start Date",
@@ -220,6 +231,7 @@ const SharedTripView = () => {
 
       {trip.description && (
         <Paper
+          className="print-section"
           elevation={0}
           sx={{
             p: 3,

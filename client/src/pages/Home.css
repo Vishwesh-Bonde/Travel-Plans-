@@ -20,7 +20,6 @@
   font-family: "DM Sans", sans-serif;
   background: var(--white);
   color: var(--dark);
-  overflow-x: hidden;
 }
 
 html {
@@ -36,7 +35,7 @@ html {
   background: rgba(253, 250, 245, 0.92);
   backdrop-filter: blur(8px);
   border-bottom: 0.5px solid rgba(26, 74, 107, 0.12);
-  position: fixed;
+  position: sticky;
   width: 100%;
   left: 0;
   top: 0;
@@ -122,7 +121,8 @@ html {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  padding: 4rem 3rem 4rem 4rem;
+  /* Increased top padding so hero clears the fixed navbar */
+  padding: 8rem 3rem 4rem 4rem;
   gap: 3rem;
   position: relative;
   overflow: hidden;
@@ -161,7 +161,7 @@ html {
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.5px;
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
 }
 
 .wander-dot {
@@ -346,12 +346,41 @@ html {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
   overflow: hidden;
-  border: 0.5px solid rgba(26, 74, 107, 0.1);
+  border: 1.5px solid rgba(26, 74, 107, 0.4);
 }
 
 .wander-sf {
   padding: 1.4rem 1.5rem;
-  border-right: 0.5px solid rgba(26, 74, 107, 0.08);
+  border-right: 1px solid rgba(26, 74, 107, 0.3);
+}
+
+.wander-recent-searches {
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  top: calc(100% + 0.5rem);
+  background: #ffffff;
+  border: 1px solid rgba(26, 74, 107, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(15, 45, 64, 0.14);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.wander-recent-search-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  color: var(--ocean);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wander-recent-search-item:hover {
+  background: rgba(26, 74, 107, 0.05);
 }
 
 .wander-sf-label {
@@ -361,6 +390,7 @@ html {
   letter-spacing: 0.8px;
   text-transform: uppercase;
   margin-bottom: 0.3rem;
+  text-align: left;
 }
 
 .wander-sf-val {
@@ -461,6 +491,10 @@ html {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr;
   gap: 1.25rem;
+  /* make desktop grid rows fixed so small cards match height
+     and the tall card spans exactly two rows */
+  grid-auto-rows: 230px;
+  align-items: stretch;
 }
 
 .wander-dest-card {
@@ -470,6 +504,8 @@ html {
   cursor: pointer;
   transition: transform 0.3s;
   background: #1a4a6b;
+  display: flex;
+  flex-direction: column;
 }
 
 .wander-dest-card:hover {
@@ -482,14 +518,15 @@ html {
 
 .wander-dest-card-img {
   width: 100%;
-  height: 100%;
-  min-height: 220px;
+  /* let the image container flex to fill the card cell */
+  min-height: 0;
   position: relative;
   overflow: hidden;
+  flex: 1 1 auto;
 }
 
 .wander-dest-card.tall .wander-dest-card-img {
-  min-height: 460px;
+  height: 100%;
 }
 
 .wander-dest-overlay {
@@ -893,7 +930,8 @@ html {
 @media (max-width: 900px) {
   .wander-hero {
     grid-template-columns: 1fr;
-    padding: 3rem 1.5rem;
+    /* Mobile: increase top padding to clear mobile navbar */
+    padding: 7rem 1.5rem 3rem 1.5rem;
     min-height: auto;
   }
 
@@ -923,7 +961,7 @@ html {
 
   .wander-sf {
     border-right: none;
-    border-bottom: 0.5px solid rgba(26, 74, 107, 0.08);
+    border-bottom: 1px solid rgba(26, 74, 107, 0.3);
   }
 
   .wander-section {
@@ -1041,7 +1079,7 @@ html {
   justify-content: center !important;
   padding: 1rem 1.75rem !important;
   height: 84px !important;
-  border-right: 1px solid rgba(26, 74, 107, 0.12) !important;
+  border-right: 1px solid rgba(26, 74, 107, 0.35) !important;
   border-bottom: none !important;
 }
 
@@ -1129,5 +1167,58 @@ html {
   }
   .wander-page .wander-search-btn {
     height: 52px !important;
+  }
+}
+
+.wander-testi-quote-container {
+  height: 280px; /* Adjust if your cards are taller or shorter */
+  overflow: hidden;
+  position: relative;
+}
+
+.wander-testi-quote-track {
+  display: flex;
+  flex-direction: column;
+  /* Updated total time to 19s to give a 4-second reading hold per review */
+  animation: scrollUpTestimonials 19s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.wander-testi-card-slide {
+  height: 280px; /* Must match container height perfectly */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* ── 4-Second Hold & Scroll Animation ── */
+@keyframes scrollUpTestimonials {
+  /* REVIEW 1 (Hold from 0% to 21%) */
+  0%,
+  21% {
+    transform: translateY(0);
+  }
+
+  /* Slide down to Review 2 */
+  25%,
+  46% {
+    transform: translateY(-280px);
+  }
+
+  /* Slide down to Review 3 */
+  50%,
+  71% {
+    transform: translateY(-560px);
+  }
+
+  /* Slide down to Review 4 */
+  75%,
+  96% {
+    transform: translateY(-840px);
+  }
+
+  /* Slide down to Clone (End of loop) and snap instantly back to 0% */
+  100% {
+    transform: translateY(-1120px);
   }
 }
