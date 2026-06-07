@@ -526,6 +526,9 @@ const Home = () => {
           <li>
             <a href="#wander-testimonials">Testimonials</a>
           </li>
+          <li>
+            <Link to="/travel-checklist">Checklist</Link>
+          </li>
           {isAuthenticated && (
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -614,6 +617,17 @@ const Home = () => {
             >
               Features
             </a>
+            <Link
+              to="/travel-checklist"
+              style={{
+                color: "var(--ocean)",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
+              onClick={() => setMobileOpen(false)}
+            >
+              Checklist
+            </Link>
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
@@ -1061,6 +1075,7 @@ const Home = () => {
               <Link to="/about">About</Link>
               <Link to="/careers">Careers</Link>
               <Link to="/contact">Contact</Link>
+              <Link to="/travel-checklist">Travel Checklist</Link>
             </div>
 
             <div className="wander-footer-col">
