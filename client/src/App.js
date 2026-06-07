@@ -21,6 +21,7 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Contact from "./pages/contact"; // ✅ ADDED
 import PrivateRoute from "./components/PrivateRoute";
+import ScrollButtons from "./components/ScrollButtons";
 import { loadUser } from "./redux/actions/authActions";
 import About from "./pages/About"; // <-- ADD THIS IMPORT
 import TravelChecklist from "./components/TravelChecklist";
@@ -65,6 +66,7 @@ function App() {
               {/* Fallback */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <ScrollButtons />
           </div>
         </Router>
       </ThemeProvider>

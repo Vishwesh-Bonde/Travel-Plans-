@@ -524,7 +524,7 @@ const Home = () => {
             <a href="#wander-features">Features</a>
           </li>
           <li>
-            <a href="#wander-testimonials">Testimonials</a>
+            <a href="#wander-testimonials">Experiences</a>
           </li>
           <li>
             <Link to="/travel-checklist">Checklist</Link>
@@ -607,6 +607,17 @@ const Home = () => {
               Destinations
             </a>
             <a
+              href="#wander-testimonials"
+              style={{
+                color: "var(--ocean)",
+                textDecoration: "none",
+                fontWeight: 500,
+              }}
+              onClick={() => setMobileOpen(false)}
+            >
+              Experiences
+            </a>
+            <a
               href="#wander-features"
               style={{
                 color: "var(--ocean)",
@@ -617,17 +628,21 @@ const Home = () => {
             >
               Features
             </a>
-            <Link
-              to="/travel-checklist"
-              style={{
-                color: "var(--ocean)",
-                textDecoration: "none",
-                fontWeight: 500,
-              }}
-              onClick={() => setMobileOpen(false)}
-            >
-              Checklist
-            </Link>
+
+
+<Link
+  to="/travel-checklist"
+  style={{
+    color: "var(--ocean)",
+    textDecoration: "none",
+    fontWeight: 500,
+  }}
+  onClick={() => setMobileOpen(false)}
+>
+  Checklist
+</Link>
+
+
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
@@ -687,6 +702,11 @@ const Home = () => {
                 Explore Destinations
               </button>
             </a>
+
+            <Link to="/budget-estimator">
+              <button className="wander-btn-ghost">Budget Estimator</button>
+            </Link>
+
             <Link to={isAuthenticated ? "/dashboard" : "/register"}>
               <button className="wander-btn-ghost">
                 {isAuthenticated ? "Dashboard →" : "Start Free"}
@@ -987,9 +1007,8 @@ const Home = () => {
       <FAQSection />
 
       {/* ═══ TESTIMONIAL ═══ */}
-      <section className="wander-testi-section">
-        {/* Left Side: Fixed wrapper containing the sliding carousel content */}
-        <div className="wander-testi-carousel-wrapper">
+      <section className="wander-testi-section" id="wander-testimonials">
+        <div>
           <div className="wander-testi-label">Traveller Stories</div>
           <div className="wander-testi-heading">
             Journeys that changed everything
@@ -1066,6 +1085,7 @@ const Home = () => {
             <div className="wander-footer-col">
               <h4>Explore</h4>
               <a href="#wander-dest-section">Destinations</a>
+              <a href="#wander-testimonials">Experiences</a>
               <a href="#wander-features">Features</a>
               <a href="#wander-testimonials">Testimonials</a>
             </div>

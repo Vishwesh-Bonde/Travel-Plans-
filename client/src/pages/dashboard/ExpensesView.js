@@ -30,7 +30,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadIcon from "@mui/icons-material/Download";
 import WarningIcon from "@mui/icons-material/Warning";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
@@ -50,6 +50,8 @@ import {
 } from "../../redux/actions/expenseActions";
 import { getTrips } from "../../redux/actions/tripActions";
 import PrimaryButton from "../../components/PrimaryButton";
+import * as XLSX from "xlsx";
+import Menu from "@mui/material/Menu";
 
 const EXPENSE_CATEGORIES = [
   "Accommodation",
@@ -93,6 +95,16 @@ const ExpensesView = () => {
   const [activeTripId, setActiveTripId] = useState("");
   const [open, setOpen] = useState(false);
   const [amountError, setAmountError] = useState("");
+
+  const [exportAnchorEl, setExportAnchorEl] = useState(null);
+
+  const handleExportMenuOpen = (event) => {
+    setExportAnchorEl(event.currentTarget);
+  };
+
+  const handleExportMenuClose = () => {
+    setExportAnchorEl(null);
+  };
   const [selectedBase, setSelectedBase] = useState("INR");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
@@ -283,6 +295,32 @@ const ExpensesView = () => {
     URL.revokeObjectURL(url);
   };
 
+  const handleExportExcel = () => {
+    if (!expenses || expenses.length === 0) {
+      alert("No expenses to export!");
+      return;
+    }
+
+    const data = expenses.map((e) => ({
+      Date: new Date(e.date).toLocaleDateString(),
+      Category: e.category,
+      Description: e.description || "",
+      Amount: e.amount,
+      Currency: e.currency,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Expenses");
+
+    XLSX.writeFile(
+      workbook,
+      `expenses_${activeTrip?.destination || "trip"}.xlsx`,
+    );
+
+    handleExportMenuClose();
+  };
   const dialogAmount = parseFloat(form.amount) || 0;
   const isOverBudgetDialog = budget > 0 && totalSpent + dialogAmount > budget;
   const overBudgetBy = totalSpent + dialogAmount - budget;
@@ -317,25 +355,38 @@ const ExpensesView = () => {
             Visualize and optimize your travel finances in real-time
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 1.5, justifyContent: "flex-end" }}>
-          <Tooltip title="Download CSV Report">
-            <Button
-              variant="outlined"
-              color="primary"
-              startIcon={<FileDownloadIcon />}
-              onClick={handleExportCSV}
-              disabled={!activeTripId || !expenses || expenses.length === 0}
-              sx={{
-                borderRadius: 2.5,
-                fontWeight: 600,
-                textTransform: "none",
-                px: 2.5,
-                borderWidth: "1.5px",
-                "&:hover": { borderWidth: "1.5px" },
-              }}
-            >
-              Export Report
-            </Button>
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Tooltip title="Export Expenses">
+            <>
+              <Button
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                onClick={handleExportMenuOpen}
+                disabled={!activeTripId || !expenses || expenses.length === 0}
+                sx={{ borderRadius: 3 }}
+              >
+                Export
+              </Button>
+
+              <Menu
+                anchorEl={exportAnchorEl}
+                open={Boolean(exportAnchorEl)}
+                onClose={handleExportMenuClose}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleExportCSV();
+                    handleExportMenuClose();
+                  }}
+                >
+                  Export CSV
+                </MenuItem>
+
+                <MenuItem onClick={handleExportExcel}>
+                  Export Excel (.xlsx)
+                </MenuItem>
+              </Menu>
+            </>
           </Tooltip>
           <PrimaryButton
             startIcon={<AddIcon />}
