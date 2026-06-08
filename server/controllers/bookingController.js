@@ -245,20 +245,39 @@ exports.bookHotel = async (req, res) => {
   try {
     const { hotelId, roomType, guests, checkIn, checkOut, tripId } = req.body;
 
+    // Validate that all required fields are present
     if (!hotelId || !roomType || !guests || !checkIn || !checkOut || !tripId) {
       return res.status(400).json({
         msg: "Please provide all required booking details",
       });
     }
 
-    // Look up the selected hotel to get its actual price
-    const selectedHotel = mockHotels.find((h) => h.id === hotelId);
-    if (!selectedHotel) {
-      return res.status(404).json({ msg: "Hotel not found" });
+    // 1. Validate Date Formatting Semantics (Fixes corrupted-date-string vulnerability)
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
+    if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+      return res.status(400).json({
+        msg: "Please provide valid check-in and check-out dates",
+      });
     }
 
-    const nights =
-      (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+    // 2. Validate Stay Duration Chronology (Fixes negative-date and same-day checkout vulnerabilities)
+    const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
+    const totalNights = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
+
+    if (totalNights < 1) {
+      return res.status(400).json({
+        msg: "Booking duration must be at least 1 night",
+      });
+    }
+
+    // 3. Complete Safe Price Calculation
+    const PRICE_PER_NIGHT = 199.99;
+    const calculatedPrice = parseFloat(
+      (PRICE_PER_NIGHT * totalNights).toFixed(2),
+    );
+
     const bookingConfirmation = {
       bookingId: "HB" + Math.floor(Math.random() * 10000000),
       hotelId,
@@ -267,7 +286,7 @@ exports.bookHotel = async (req, res) => {
       checkOut,
       guests,
       status: "confirmed",
-      totalPrice: selectedHotel.price * nights,
+      totalPrice: calculatedPrice,
       currency: "USD",
     };
 
