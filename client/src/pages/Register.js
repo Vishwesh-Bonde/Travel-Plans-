@@ -648,9 +648,7 @@ const Register = () => {
               </Box>
 
               {activeStep === 0 && (
-                <GoogleAuthSection
-                  onSuccess={handleGoogleSuccess}
-                />
+                <GoogleAuthSection onSuccess={handleGoogleSuccess} />
               )}
             </form>
           </Paper>

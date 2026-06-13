@@ -54,10 +54,7 @@ const GoogleAuthSection = ({ onSuccess }) => {
       </Divider>
 
       {/* Container measured so we can feed exact px width to GoogleLogin */}
-      <Box
-        ref={containerRef}
-        sx={{ width: "100%", overflow: "hidden", mb: 3 }}
-      >
+      <Box ref={containerRef} sx={{ width: "100%", overflow: "hidden", mb: 3 }}>
         {buttonWidth !== null && (
           <GoogleLogin
             theme="outlined"
