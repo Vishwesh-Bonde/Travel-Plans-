@@ -283,22 +283,21 @@ const WeatherView = () => {
                 </Grid>
               </Grid>
               {/* Weather metadata */}
-              <Box sx={{ mt: 3 }}>
+              <Box
+                sx={{
+                  mt: 3,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: 1,
+                }}
+              >
                 {/* Weather API provider */}
-                <Typography
-                  variant="caption"
-                  display="block"
-                  sx={{ opacity: 0.9 }}
-                >
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>
                   Source: {currentWeather?.provider || "OpenWeather"}
                 </Typography>
 
-                {/* Last successful weather fetch */}
-                <Typography
-                  variant="caption"
-                  display="block"
-                  sx={{ opacity: 0.9 }}
-                >
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>
                   Last Updated:{" "}
                   {fetchedAt ? new Date(fetchedAt).toLocaleTimeString() : "—"}
                 </Typography>
@@ -360,16 +359,29 @@ const WeatherView = () => {
           <Typography variant="h6" fontWeight={700} mb={2}>
             5-Day Forecast — {forecast?.location}
           </Typography>
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              justifyContent: "space-between",
+            }}
+          >
             {forecastList
               .filter((_, idx) => idx % 8 === 0)
               .slice(0, 5)
               .map((day, idx) => (
-                <Grid xs={6} sm={4} md={2.4} key={idx}>
+                <Grid
+                  key={idx}
+                  sx={{
+                    flex: 1,
+                    minWidth: 150,
+                  }}
+                >
                   <Paper
                     elevation={0}
                     sx={{
                       p: 2.5,
+                      height: "100%",
                       borderRadius: 3,
                       textAlign: "center",
                       border: "1px solid",
