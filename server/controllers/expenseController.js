@@ -131,10 +131,10 @@ exports.updateExpense = async (req, res) => {
 
     const trip = await Trip.findById(expense.trip);
     if (!trip) {
-  return res.status(404).json({
-    msg: "Associated trip not found.",
-  });
-}
+      return res.status(404).json({
+        msg: "Associated trip not found.",
+      });
+    }
 
     const { amount, currency, category, description, date } = req.body;
 
