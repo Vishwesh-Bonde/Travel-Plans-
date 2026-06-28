@@ -74,7 +74,13 @@ const WeatherWidget = ({ destination }) => {
     return (
       <Paper
         elevation={0}
-        sx={{ p: 3, borderRadius: 3, border: "1px solid", borderColor: "divider", mb: 3 }}
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          border: "1px solid",
+          borderColor: "divider",
+          mb: 3,
+        }}
       >
         <Skeleton variant="text" width={160} height={28} />
         <Skeleton variant="text" width={100} height={60} sx={{ my: 1 }} />
@@ -134,7 +140,13 @@ const WeatherWidget = ({ destination }) => {
           color: "white",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          }}
+        >
           <Box>
             <Typography variant="subtitle2" sx={{ opacity: 0.85 }}>
               Weather in {currentWeather.location}
@@ -143,7 +155,10 @@ const WeatherWidget = ({ destination }) => {
             <Typography variant="h3" fontWeight={800} sx={{ my: 0.5 }}>
               {Math.round(currentWeather.temperature)}°C
             </Typography>
-            <Typography variant="body1" sx={{ textTransform: "capitalize", opacity: 0.9 }}>
+            <Typography
+              variant="body1"
+              sx={{ textTransform: "capitalize", opacity: 0.9 }}
+            >
               {currentWeather.description}
             </Typography>
           </Box>
@@ -202,10 +217,20 @@ const WeatherWidget = ({ destination }) => {
       {/* 5-Day Forecast — horizontal, responsive grid */}
       {forecastList.length > 0 && (
         <Box sx={{ mt: 2.5 }}>
-          <Typography variant="subtitle2" fontWeight={700} mb={1.5} color="text.secondary">
+          <Typography
+            variant="subtitle2"
+            fontWeight={700}
+            mb={1.5}
+            color="text.secondary"
+          >
             5-Day Forecast
           </Typography>
-          <Grid container spacing={1.5} wrap="nowrap" sx={{ overflowX: "auto", pb: 1 }}>
+          <Grid
+            container
+            spacing={1.5}
+            wrap="nowrap"
+            sx={{ overflowX: "auto", pb: 1 }}
+          >
             {forecastList
               .filter((_, idx) => idx % 8 === 0)
               .slice(0, 5)
@@ -220,10 +245,17 @@ const WeatherWidget = ({ destination }) => {
                       border: "1px solid",
                       borderColor: "divider",
                       transition: "transform 0.2s",
-                      "&:hover": { transform: "translateY(-3px)", boxShadow: 2 },
+                      "&:hover": {
+                        transform: "translateY(-3px)",
+                        boxShadow: 2,
+                      },
                     }}
                   >
-                    <Typography variant="caption" color="text.secondary" display="block">
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      display="block"
+                    >
                       {new Date(day.date).toLocaleDateString("en-IN", {
                         weekday: "short",
                         day: "2-digit",
@@ -238,7 +270,10 @@ const WeatherWidget = ({ destination }) => {
                     </Typography>
                     <Typography
                       variant="caption"
-                      sx={{ textTransform: "capitalize", color: "text.secondary" }}
+                      sx={{
+                        textTransform: "capitalize",
+                        color: "text.secondary",
+                      }}
                     >
                       {day.description}
                     </Typography>
