@@ -130,10 +130,10 @@ exports.updateExpense = async (req, res) => {
     // Build expense object
     const expenseFields = {};
     if (amount !== undefined) expenseFields.amount = parseFloat(amount);
-    if (currency) expenseFields.currency = currency;
-    if (category) expenseFields.category = category;
-    if (description) expenseFields.description = description;
-    if (date) expenseFields.date = date;
+    if (currency !== undefined) expenseFields.currency = currency;
+    if (category !== undefined) expenseFields.category = category;
+    if (description !== undefined) expenseFields.description = description;
+    if (date !== undefined) expenseFields.date = date;
 
     expense = await Expense.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },
