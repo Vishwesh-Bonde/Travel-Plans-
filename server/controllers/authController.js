@@ -101,18 +101,13 @@ exports.login = async (req, res, next) => {
 
     // Create JWT token
     const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: "5d" },
-      (err, token) => {
-        if (err) return next(err);
-        res.json({
-          token,
-          user: { id: user.id, name: user.name, email: user.email },
-        });
-      },
-    );
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "5d",
+    });
+    res.json({
+      token,
+      user: { id: user.id, name: user.name, email: user.email },
+    });
   } catch (err) {
     next(err);
   }
@@ -147,20 +142,13 @@ exports.googleAuth = async (req, res) => {
       });
     }
 
-    jwt.sign(
-      {
-        user: { id: user.id },
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "5d" },
-      (err, token) => {
-        if (err) throw err;
-        res.json({
-          token,
-          user: { id: user.id, name: user.name, email: user.email },
-        });
-      },
-    );
+    const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET, {
+      expiresIn: "5d",
+    });
+    res.json({
+      token,
+      user: { id: user.id, name: user.name, email: user.email },
+    });
   } catch (e) {
     console.log(e);
 
@@ -323,19 +311,14 @@ exports.resetPassword = async (req, res, next) => {
 
     // Create JWT token and log user in automatically (optional)
     const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: "5d" },
-      (err, token) => {
-        if (err) return next(err);
-        res.json({
-          msg: "Password reset successful",
-          token,
-          user: { id: user.id, name: user.name, email: user.email },
-        });
-      },
-    );
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "5d",
+    });
+    res.json({
+      msg: "Password reset successful",
+      token,
+      user: { id: user.id, name: user.name, email: user.email },
+    });
   } catch (err) {
     next(err);
   }
