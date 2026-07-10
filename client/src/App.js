@@ -28,6 +28,10 @@ import { flushOfflineQueue } from "./redux/actions/offlineQueueActions";
 import About from "./pages/About"; // <-- ADD THIS IMPORT
 import TravelChecklist from "./components/TravelChecklist";
 
+if (process.env.NODE_ENV === "development") {
+  window.store = store;
+}
+
 function App() {
   useEffect(() => {
     store.dispatch(loadUser());
