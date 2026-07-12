@@ -1,6 +1,7 @@
 const axios = require("axios");
 
-const BASE_URL = process.env.OPENTRIPMAP_BASE_URL || "https://api.opentripmap.com/0.1";
+const BASE_URL =
+  process.env.OPENTRIPMAP_BASE_URL || "https://api.opentripmap.com/0.1";
 const LANG = process.env.OPENTRIPMAP_LANG || "en";
 const REQUEST_TIMEOUT_MS = 10000;
 
@@ -47,7 +48,8 @@ async function openTripMapGet(path, query = {}) {
       // err.response.data.error exists.
       const upstreamMsg =
         (typeof err.response.data === "object" && err.response.data?.error) ||
-        (typeof err.response.data === "string" && err.response.data.slice(0, 200)) ||
+        (typeof err.response.data === "string" &&
+          err.response.data.slice(0, 200)) ||
         `OpenTripMap request failed with status ${err.response.status}`;
 
       throw new OpenTripMapError(upstreamMsg, {
@@ -95,7 +97,7 @@ async function geocodeCity(keyword) {
  * @param {Object} opts
  * @param {number} opts.latitude
  * @param {number} opts.longitude
- * @param {number} [opts.radius] 
+ * @param {number} [opts.radius]
  * @param {string[]} [opts.kinds]
  */
 async function searchPointsOfInterest({
@@ -107,9 +109,9 @@ async function searchPointsOfInterest({
   const query = {
     lat: latitude,
     lon: longitude,
-    radius: radius * 1000, 
+    radius: radius * 1000,
     limit: 50,
-    rate: 1, 
+    rate: 1,
     format: "json",
   };
 

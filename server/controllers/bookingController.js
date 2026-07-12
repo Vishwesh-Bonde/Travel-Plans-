@@ -293,7 +293,6 @@ exports.bookHotel = async (req, res) => {
   }
 };
 
-
 const VALID_POI_CATEGORIES = [
   "SIGHTS",
   "HISTORICAL",
@@ -312,7 +311,6 @@ const CATEGORY_TO_KINDS = {
   SHOPPING: ["shops"],
 };
 
-
 const DEFAULT_KINDS = Array.from(
   new Set(Object.values(CATEGORY_TO_KINDS).flat()),
 );
@@ -328,7 +326,6 @@ function resolveCategory(kindsString) {
   if (matches(CATEGORY_TO_KINDS.SHOPPING)) return "SHOPPING";
   return "SIGHTS";
 }
-
 
 function rateToRank(rate) {
   const HERITAGE_TIERS = { "1h": 70, "2h": 85, "3h": 95, "7d": 100 };
@@ -360,7 +357,6 @@ function estimateEntryFee(poi, rank) {
   const totalUsd = baseUsd + popularityBoostUsd;
   return Math.round((totalUsd * USD_TO_INR_RATE) / 10) * 10; // round to nearest ₹10
 }
-
 
 function buildBookingLinks(name, city) {
   const query = encodeURIComponent(`${name} ${city}`.trim());
@@ -428,10 +424,7 @@ exports.searchPlaces = async (req, res) => {
           city: city.name,
           category: resolveCategory(poi.kinds),
           rank,
-          tags: (poi.kinds || "")
-            .split(",")
-            .filter(Boolean)
-            .slice(0, 6),
+          tags: (poi.kinds || "").split(",").filter(Boolean).slice(0, 6),
           coordinates: poi.point,
           price: estimateEntryFee(poi, rank),
           currency: "INR",
