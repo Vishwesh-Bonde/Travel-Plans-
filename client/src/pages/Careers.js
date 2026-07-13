@@ -28,7 +28,11 @@ const Careers = () => {
       <Container maxWidth="md">
         <Box sx={{ textAlign: "center", mb: 6 }}>
           <WorkIcon sx={{ fontSize: 50, color: "primary.main", mb: 2 }} />
-          <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 2 }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            sx={{ fontWeight: 700, mb: 2 }}
+          >
             Careers at PackGo
           </Typography>
           <Typography
@@ -36,8 +40,8 @@ const Careers = () => {
             color="text.secondary"
             sx={{ maxWidth: 600, mx: "auto" }}
           >
-            We're building the future of travel planning. Explore our
-            open roles below.
+            We're building the future of travel planning. Explore our open roles
+            below.
           </Typography>
         </Box>
 
@@ -73,8 +77,8 @@ const Careers = () => {
 
         <Box sx={{ textAlign: "center", mt: 6 }}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Don't see a role that fits? Reach out anyway, we'd love to hear
-            from you.
+            Don't see a role that fits? Reach out anyway, we'd love to hear from
+            you.
           </Typography>
           <Button
             component={RouterLink}

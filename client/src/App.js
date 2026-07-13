@@ -19,7 +19,7 @@ import SharedTripView from "./pages/dashboard/SharedTripView";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
-import Contact from "./pages/contact"; 
+import Contact from "./pages/contact";
 import Careers from "./pages/Careers";
 import PrivateRoute from "./components/PrivateRoute";
 import ScrollButtons from "./components/ScrollButtons";
