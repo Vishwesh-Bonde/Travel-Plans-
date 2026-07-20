@@ -528,10 +528,10 @@ const Home = () => {
   const filteredDestinations = where.trim()
     ? (Array.isArray(destinations) ? destinations : []).filter(
         (d) =>
-          (d.name || "").toLowerCase().includes(where.toLowerCase()) ||
-          (d.city || "").toLowerCase().includes(where.toLowerCase()) ||
-          (d.state || "").toLowerCase().includes(where.toLowerCase()) ||
-          (d.category || "").toLowerCase().includes(where.toLowerCase()),
+          (d.name || "").toLowerCase().includes(where.trim().toLowerCase()) ||
+          (d.city || "").toLowerCase().includes(where.trim().toLowerCase()) ||
+          (d.state || "").toLowerCase().includes(where.trim().toLowerCase()) ||
+          (d.category || "").toLowerCase().includes(where.trim().toLowerCase()),
       )
     : Array.isArray(destinations)
       ? destinations
